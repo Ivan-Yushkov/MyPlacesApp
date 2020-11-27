@@ -31,13 +31,13 @@ class MainViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? TableViewCell else { return UITableViewCell() }
         let place = restaurantNames[indexPath.row]
         
-        cell.textLabel?.text = place
-        cell.imageView?.image = UIImage(named: place)
-        cell.imageView?.layer.cornerRadius = cell.frame.size.height / 2
-        cell.imageView?.clipsToBounds = true
+        cell.nameLable.text = place
+        cell.placeImageView.image = UIImage(named: place)
+        cell.placeImageView.clipsToBounds = true
+        cell.placeImageView.layer.cornerRadius = cell.placeImageView.frame.size.height / 2
 
         return cell
     }
