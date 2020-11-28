@@ -44,6 +44,9 @@ class MainViewController: UITableViewController {
     
 
     //MARK: - Table View Delegate
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 85
+    }
   
     //MARK: - Cancel from new place view controller
     @IBAction func cancelAction(_ segue: UIStoryboardSegue) {}
