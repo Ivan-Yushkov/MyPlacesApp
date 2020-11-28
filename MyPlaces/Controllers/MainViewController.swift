@@ -9,12 +9,10 @@ import UIKit
 
 class MainViewController: UITableViewController {
 
-    let restaurantNames = [
-        "Burger Heroes", "Kitchen", "Bonsai", "Дастархан",
-        "Индокитай", "X.O", "Балкан Гриль", "Sherlock Holmes",
-        "Speak Easy", "Morris Pub", "Вкусные истории",
-        "Классик", "Love&Life", "Шок", "Бочка"
-    ]
+   
+    
+    let places = Place.getPlaces()
+    
     let identifier = "Cell"
     
     override func viewDidLoad() {
@@ -26,16 +24,18 @@ class MainViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return restaurantNames.count
+        return places.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? TableViewCell else { return UITableViewCell() }
-        let place = restaurantNames[indexPath.row]
+        let place = places[indexPath.row]
         
-        cell.nameLable.text = place
-        cell.placeImageView.image = UIImage(named: place)
+        cell.nameLable.text = place.name
+        cell.locationLable.text = place.location
+        cell.typeLable.text = place.type
+        cell.placeImageView.image = UIImage(named: place.image)
         cell.placeImageView.clipsToBounds = true
         cell.placeImageView.layer.cornerRadius = cell.placeImageView.frame.size.height / 2
 
@@ -44,8 +44,7 @@ class MainViewController: UITableViewController {
     
 
     //MARK: - Table View Delegate
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 85
-    }
-
+  
+    //MARK: - Cancel from new place view controller
+    @IBAction func cancelAction(_ segue: UIStoryboardSegue) {}
 }
