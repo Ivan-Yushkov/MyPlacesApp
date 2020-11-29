@@ -11,10 +11,15 @@ class NewPlaceViewController: UITableViewController {
 
     
     fileprivate var imageIsChanged = false
+    var currentPlace: Place?
     
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
-    @IBOutlet weak var newPlaceImageView: UIImageView!
+    @IBOutlet weak var newPlaceImageView: UIImageView! {
+        didSet {
+            newPlaceImageView.contentMode = .scaleAspectFill
+        }
+    }
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var locationTextField: UITextField!
     @IBOutlet weak var typeTextField: UITextField!
@@ -27,8 +32,14 @@ class NewPlaceViewController: UITableViewController {
         tableView.tableFooterView = UIView()
         saveButton.isEnabled = false
         nameTextField.addTarget(self, action: #selector(textFieldDidChanged), for: .editingChanged)
+        setupView()
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+    }
     //MARK: - method for save new place
     @IBAction func saveAction() {
         
@@ -41,11 +52,44 @@ class NewPlaceViewController: UITableViewController {
         }
         guard let imageData = image?.pngData() else { return }
         let newPlace = Place(name: nameTextField.text!, location: locationTextField.text, type: typeTextField.text, imageData: imageData)
-        StorageManager.savePlace(newPlace)
+        if currentPlace != nil {
+            try! realm.write {
+                currentPlace?.name = newPlace.name
+                currentPlace?.location = newPlace.location
+                currentPlace?.type = newPlace.type
+                currentPlace?.imageData = newPlace.imageData
+            }
+        } else {
+            StorageManager.savePlace(newPlace)
+        
+        }
     }
     
     @IBAction func cancelAction(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    //MARK: - Setup edit mode method
+    private func setupView() {
+        if let newPlace = currentPlace {
+            setupNavigationBar()
+            nameTextField.text = newPlace.name
+            locationTextField.text = newPlace.location
+            typeTextField.text = newPlace.type
+            guard let imageData = newPlace.imageData else { return }
+            newPlaceImageView.image = UIImage(data: imageData)
+            nameTextField.addTarget(self, action: #selector(textFieldDidChanged), for: .editingChanged)
+        }
+    }
+    
+    //MARK: - method for setup editing mode for view controller
+    fileprivate func setupNavigationBar() {
+        if let topItem = navigationController?.navigationBar.topItem {
+            topItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        }
+        navigationItem.leftBarButtonItem = nil
+        title = currentPlace?.name
+        saveButton.isEnabled = true
     }
     
     //MARK: - method for observe editing name text field

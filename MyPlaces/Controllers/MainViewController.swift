@@ -21,6 +21,16 @@ class MainViewController: UITableViewController {
         places = realm.objects(Place.self)
     }
 
+    //MARK: - prepare for segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "1111" {
+            guard let indexPath = tableView.indexPathForSelectedRow else { return }
+            let place = places[indexPath.row]
+            let vc = segue.destination as! NewPlaceViewController
+            vc.currentPlace = place
+        }
+    }
+    
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -60,17 +70,15 @@ class MainViewController: UITableViewController {
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
     
-//    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-//        return true
+
+//MARK: - Method for select row
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let place = places[indexPath.row]
+//        performSegue(withIdentifier: "1111", sender: place)
 //    }
-//
-//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-//
-//        }
-//    }
-    
   
+
+
     //MARK: - Cancel from new place view controller
     @IBAction func unwindSegue(_ segue: UIStoryboardSegue) {
         guard let newPlaceVC = segue.source as? NewPlaceViewController else { return }
