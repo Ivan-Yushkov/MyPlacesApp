@@ -9,10 +9,52 @@ import UIKit
 
 class NewPlaceViewController: UITableViewController {
 
+    
+    fileprivate var imageIsChanged = false
+    
+    
+    @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var newPlaceImageView: UIImageView!
+    @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var locationTextField: UITextField!
+    @IBOutlet weak var typeTextField: UITextField!
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tableView.tableFooterView = UIView()
+        saveButton.isEnabled = false
+        nameTextField.addTarget(self, action: #selector(textFieldDidChanged), for: .editingChanged)
+    }
+    
+    //MARK: - method for save new place
+    @IBAction func saveAction() {
+        
+        
+        var image: UIImage?
+        if imageIsChanged {
+            image = newPlaceImageView.image
+        } else {
+            image = #imageLiteral(resourceName: "imagePlaceholder")
+        }
+        guard let imageData = image?.pngData() else { return }
+        let newPlace = Place(name: nameTextField.text!, location: locationTextField.text, type: typeTextField.text, imageData: imageData)
+        StorageManager.savePlace(newPlace)
+    }
+    
+    @IBAction func cancelAction(_ sender: UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    //MARK: - method for observe editing name text field
+    @objc func textFieldDidChanged() {
+        if nameTextField.text?.isEmpty == false {
+            saveButton.isEnabled = true
+        } else {
+            saveButton.isEnabled = false
+        }
     }
     
     //MARK: - Table view delegate
@@ -59,7 +101,7 @@ extension NewPlaceViewController: UITextFieldDelegate {
 //MARK: - Work with image
 extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    func chooseImagePicker(source: UIImagePickerController.SourceType) {
+    fileprivate func chooseImagePicker(source: UIImagePickerController.SourceType) {
         if UIImagePickerController.isSourceTypeAvailable(source) {
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
@@ -76,5 +118,6 @@ extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationC
         newPlaceImageView.contentMode = .scaleAspectFill
         newPlaceImageView.clipsToBounds = true
         dismiss(animated: true, completion: nil)
+        imageIsChanged = true
     }
 }

@@ -92,7 +92,7 @@
         <!--New Place-->
         <scene sceneID="d9e-No-88p">
             <objects>
-                <tableViewController id="Pm8-Ke-Pzf" customClass="NewPlaceViewController" customModule="MyPlaces" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="newPlaceVC" id="Pm8-Ke-Pzf" customClass="NewPlaceViewController" customModule="MyPlaces" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Rpn-6L-4hZ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -258,13 +258,22 @@
                     <navigationItem key="navigationItem" title="New Place" id="h4x-zp-x1P">
                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="PT5-2e-W3b">
                             <connections>
-                                <segue destination="agl-bk-Kia" kind="unwind" unwindAction="cancelAction:" id="Shu-TJ-dhq"/>
+                                <action selector="cancelAction:" destination="Pm8-Ke-Pzf" id="1MV-wc-RRq"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Save" id="ohy-e6-Otg"/>
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="ohy-e6-Otg">
+                            <connections>
+                                <action selector="saveAction:" destination="Pm8-Ke-Pzf" id="hh0-NN-8ll"/>
+                                <segue destination="agl-bk-Kia" kind="unwind" unwindAction="unwindSegue:" id="Idg-ez-ozy"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="locationTextField" destination="fcE-GH-N3Y" id="cdw-ue-Chg"/>
+                        <outlet property="nameTextField" destination="0gr-GT-eHV" id="7RQ-KT-7cZ"/>
                         <outlet property="newPlaceImageView" destination="EBk-74-7QO" id="YfT-kw-Ond"/>
+                        <outlet property="saveButton" destination="ohy-e6-Otg" id="U7D-En-Ton"/>
+                        <outlet property="typeTextField" destination="FjD-c3-f8c" id="Kxa-2s-qx5"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SFx-kG-Wz5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
