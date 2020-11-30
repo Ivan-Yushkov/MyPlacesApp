@@ -35,11 +35,7 @@ class NewPlaceViewController: UITableViewController {
         setupView()
     }
     
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        
-    }
+
     //MARK: - method for save new place
     @IBAction func saveAction() {
         
